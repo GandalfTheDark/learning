@@ -9,6 +9,6 @@ namespace RestApiApp.Models
 
         }
 
-        public DbSet<TodoItem> TodoItems { get; set; }
+        public DbSet<TodoItem> TodoItem { get; set; } // TodoItem is name of the table
     }
 }

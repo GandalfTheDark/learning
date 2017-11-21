@@ -16,9 +16,12 @@ namespace RestApiApp.Controllers
         {
             _context = context;
 
-            if(_context.TodoItems.Count() == 0)
+            if(_context.TodoItem.Count() == 0)
             {
-                _context.TodoItems.Add(new TodoItem { Name = "Item1" });
+                _context.TodoItem.Add(new TodoItem {
+                    Name = "Whisky na Coca",
+                    Id = 1,
+                    IsComplete = "false" });
                 _context.SaveChanges();
             }
         }
@@ -26,13 +29,13 @@ namespace RestApiApp.Controllers
         [HttpGet]
         public IEnumerable<TodoItem> GetAll()
         {
-            return _context.TodoItems.ToList();
+            return _context.TodoItem.ToList();
         }
 
         [HttpGet("{id}", Name = "GetTodo")]
         public IActionResult GetById(long id)
         {
-            var item = _context.TodoItems.FirstOrDefault(t => t.Id == id);
+            var item = _context.TodoItem.FirstOrDefault(t => t.Id == id);
             if(item == null)
             {
                 return NotFound();
@@ -49,7 +52,7 @@ namespace RestApiApp.Controllers
                 return BadRequest();
             }
 
-            _context.TodoItems.Add(item);
+            _context.TodoItem.Add(item);
             _context.SaveChanges();
 
             return CreatedAtRoute("GetTodo", new { id = item.Id }, item);

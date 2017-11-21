@@ -10,6 +10,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using RestApiApp.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Data.SqlClient;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace RestApiApp
 {
@@ -17,7 +19,9 @@ namespace RestApiApp
     {
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<TodoContext>(opt => opt.UseInMemoryDatabase("TodoList"));
+            var connection = @"Server=DESKTOP-LPM0193\SQLEXPRESS;Database=test_datastore;Trusted_Connection=True;";
+            services.AddDbContext<TodoContext>(options => options.UseSqlServer(connection));
+            // services.AddDbContext<TodoContext>(opt => opt.UseInMemoryDatabase("TodoList"));
             services.AddMvc();
         }
           // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
