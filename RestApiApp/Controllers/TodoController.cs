@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using RestApiApp.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace RestApiApp.Controllers
 {
@@ -28,18 +29,18 @@ namespace RestApiApp.Controllers
         [HttpGet]
         public IEnumerable<TodoItem> GetAll()
         {
-            return _context.TodoItems.ToList();
+            return _context.TodoItems.FromSql("SELECT * FROM TodoItems").ToList();
         }
 
-        [HttpGet("{id}", Name = "GetTodo")]
+        [HttpGet("{id}/{pd}", Name = "GetTodo")]
         public IActionResult GetById(long id)
         {
-            var item = _context.TodoItems.FirstOrDefault(t => t.Id == id);
+            var item = _context.TodoItems.Where(p => p.Id == id && p.Name == "America").FirstOrDefault();
             if(item == null)
             {
-                return NotFound();
+                return new JsonResult(new ReturnMessages { Message = "The data you requested was not found!", Status = "Failed" });
             }
-            return new ObjectResult(item);
+            return new JsonResult(item);
         }
 
         // this is a POST to add an item on my todo 
